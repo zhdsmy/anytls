@@ -1,6 +1,6 @@
-# anytls
+# AnyTLS
 
-Docker image for [anytls](https://github.com/anytls/anytls-go) - A TLS proxy server
+Docker image for [AnyTLS](https://github.com/anytls/anytls-go) - A TLS proxy server
 
 [![Docker Hub](https://img.shields.io/docker/pulls/domizhang/anytls.svg)](https://hub.docker.com/r/domizhang/anytls)
 [![Docker Image Size](https://img.shields.io/docker/image-size/domizhang/anytls/latest)](https://hub.docker.com/r/domizhang/anytls)
@@ -78,6 +78,7 @@ docker-compose up -d
 1. **强烈建议**在生产环境中使用 `PSK` 环境变量设置强密码
 2. 不要在公网直接暴露服务，建议配合防火墙或反向代理使用
 3. 定期更新到最新版本以获取安全补丁
+4. 建议使用非标准端口以减少扫描风险
 
 ## 许可证
 

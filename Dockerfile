@@ -1,11 +1,7 @@
-FROM alpine:latest
+FROM alpine:latest AS builder
 
 ARG TARGETARCH
 ARG VERSION=0.0.12
-
-LABEL maintainer="domizhang" \
-      description="Docker image for anytls - A TLS proxy server" \
-      version="${VERSION}"
 
 # 安装依赖并下载anytls二进制文件
 RUN apk update \
@@ -22,16 +18,26 @@ RUN apk update \
     && chmod +x /usr/bin/anytls-server \
     && rm -rf /tmp/* anytls_${VERSION}_linux_${ARCH}.zip
 
-# 复制启动脚本到容器
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+FROM alpine:latest
+
+ARG VERSION=0.0.12
+
+LABEL maintainer="domizhang" \
+      description="Docker image for anytls - A TLS proxy server" \
+      version="${VERSION}"
 
 # 设置环境变量默认值
 ENV LISTEN_ADDR=0.0.0.0:8443 \
-    PASSWORD=""
+    PSK=""
 
 # 暴露默认端口
-EXPOSE 8443
+EXPOSE 8443/tcp
+EXPOSE 8443/udp
+
+# 复制二进制文件和启动脚本
+COPY --from=builder /usr/bin/anytls-server /usr/bin/anytls-server
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 WORKDIR /
 

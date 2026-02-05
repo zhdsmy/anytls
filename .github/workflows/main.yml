@@ -72,5 +72,5 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
           repository: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}
-          short-description: "Docker image for anytls - A TLS proxy server"
+          short-description: "Docker image for AnyTLS - A TLS proxy server"
           readme-filepath: ./README.md
