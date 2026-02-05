@@ -31,8 +31,7 @@ ENV LISTEN_ADDR=0.0.0.0:8443 \
     PSK=""
 
 # 暴露默认端口
-EXPOSE 8443/tcp
-EXPOSE 8443/udp
+EXPOSE 8443
 
 # 复制二进制文件和启动脚本
 COPY --from=builder /usr/bin/anytls-server /usr/bin/anytls-server
