@@ -4,7 +4,7 @@ ARG TARGETARCH
 ARG VERSION=0.0.12
 
 RUN apk update \
-    && apk add --no-cache unzip wget tar bsdmainutils \
+    && apk add --no-cache unzip wget tar hexdump \
     && rm -rf /var/cache/apk/*
 
 RUN if [ "$TARGETARCH" = "arm64" ] ; then \
