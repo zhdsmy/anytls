@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 ARG TARGETARCH
-ARG VERSION=0.0.12
+ENV VERSION 0.0.12
 
 RUN apk update \
     && apk add --no-cache unzip wget tar hexdump \
