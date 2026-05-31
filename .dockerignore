@@ -1,27 +1,11 @@
-# Git
 .git
 .gitignore
 .github
-
-# Documentation
+.DS_Store
 README.md
 *.md
-
-# IDE
-.vscode
-.idea
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
 *.log
-
-# Temporary files
 tmp/
 temp/
-*.tmp
+.env
+.env.local

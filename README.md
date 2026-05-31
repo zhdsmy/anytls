@@ -1,90 +1,112 @@
 # AnyTLS
 
-Docker image for [AnyTLS](https://github.com/anytls/anytls-go) - A TLS proxy server
+Docker image for [anytls-go](https://github.com/anytls/anytls-go), a TLS proxy server.
 
-[![Docker Hub](https://img.shields.io/docker/pulls/domizhang/anytls.svg)](https://hub.docker.com/r/domizhang/anytls)
+[![Docker Pulls](https://img.shields.io/docker/pulls/domizhang/anytls.svg)](https://hub.docker.com/r/domizhang/anytls)
 [![Docker Image Size](https://img.shields.io/docker/image-size/domizhang/anytls/latest)](https://hub.docker.com/r/domizhang/anytls)
 
-## 快速开始
+## Included version
 
-### 使用 Docker 运行
+- anytls-go: `0.0.12`
+- Base image: `alpine:3.23`
 
-```bash
-# 使用随机生成的密码（密码会在启动时输出到日志）
-docker run -d -p 8443:8443 --name anytls domizhang/anytls:latest
-
-# 查看生成的密码
-docker logs anytls
-
-# 使用自定义密码
-docker run -d -p 8443:8443 \
-  -e PSK="your-secure-password" \
-  --name anytls \
-  domizhang/anytls:latest
-
-# 自定义监听地址和端口
-docker run -d -p 9443:9443 \
-  -e LISTEN_ADDR="0.0.0.0:9443" \
-  -e PSK="your-secure-password" \
-  --name anytls \
-  domizhang/anytls:latest
-```
-
-### 使用 Docker Compose
-
-创建 `docker-compose.yml` 文件：
-
-```yaml
-version: '3.8'
-
-services:
-  anytls:
-    image: domizhang/anytls:latest
-    container_name: anytls
-    ports:
-      - "8443:8443"
-    environment:
-      - LISTEN_ADDR=0.0.0.0:8443
-      - PSK=your-secure-password
-    restart: unless-stopped
-```
-
-启动服务：
-
-```bash
-docker-compose up -d
-```
-
-## 环境变量
-
-| 变量名 | 默认值 | 说明 |
-|--------|--------|------|
-| `LISTEN_ADDR` | `0.0.0.0:8443` | 服务监听地址和端口 |
-| `PSK` | 随机生成 | 连接密码，如果不设置将自动生成并输出到日志 |
-
-## 支持的架构
+## Supported platforms
 
 - `linux/amd64`
 - `linux/arm64`
 
-## 镜像标签
+## Tags
 
-- `latest` - 最新的 main 分支构建
-- `x.y.z` - 特定版本号（如 `0.0.12`）
-- `x.y` - 主次版本号（如 `0.0`）
+- `latest`: latest build from the default branch
+- `0.0.12`: current AnyTLS version build
+- `0.0`: major/minor tag for versioned releases
 
-## 安全建议
+## Quick start
 
-1. **强烈建议**在生产环境中使用 `PSK` 环境变量设置强密码
-2. 不要在公网直接暴露服务，建议配合防火墙或反向代理使用
-3. 定期更新到最新版本以获取安全补丁
-4. 建议使用非标准端口以减少扫描风险
+Run with a generated password:
 
-## 许可证
+```bash
+docker run -d \
+  --name anytls \
+  -p 8443:8443 \
+  domizhang/anytls:latest
+```
 
-本项目遵循 anytls-go 的许可证。详见 [anytls-go](https://github.com/anytls/anytls-go)。
+Read the generated password from logs:
 
-## 相关链接
+```bash
+docker logs anytls
+```
 
-- [anytls-go GitHub](https://github.com/anytls/anytls-go)
-- [Docker Hub](https://hub.docker.com/r/domizhang/anytls)
+Run with a fixed password:
+
+```bash
+docker run -d \
+  --name anytls \
+  -p 8443:8443 \
+  -e PSK="your-secure-password" \
+  domizhang/anytls:latest
+```
+
+Customize listener and extra arguments:
+
+```bash
+docker run -d \
+  --name anytls \
+  -p 9443:9443 \
+  -e LISTEN_ADDR="0.0.0.0:9443" \
+  -e PSK="your-secure-password" \
+  -e ARGS="--help" \
+  domizhang/anytls:latest
+```
+
+## Docker Compose
+
+```yaml
+services:
+  anytls:
+    image: domizhang/anytls:latest
+    container_name: anytls
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+    environment:
+      LISTEN_ADDR: 0.0.0.0:8443
+      PSK: your-secure-password
+```
+
+## Environment variables
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `LISTEN_ADDR` | `0.0.0.0:8443` | Server listen address and port |
+| `PSK` | generated | Pre-shared key. If empty, a random key is generated and printed once at startup |
+| `ARGS` | empty | Extra arguments passed to `anytls-server` |
+
+## Security notes
+
+- Use a strong explicit `PSK` in production.
+- The generated `PSK` is printed to container logs so the client can be configured. Treat logs as sensitive.
+- Provided `PSK` values are not printed.
+- Do not expose the service publicly without firewall rules or an explicit access policy.
+
+## Build locally
+
+```bash
+docker build \
+  --build-arg VERSION=0.0.12 \
+  -t domizhang/anytls:local .
+```
+
+## Update policy
+
+The anytls-go version is pinned in `Dockerfile` and `.github/workflows/main.yml`. To update:
+
+1. Check the upstream [anytls-go releases](https://github.com/anytls/anytls-go/releases).
+2. Update `VERSION` / `DEFAULT_VERSION`.
+3. Build and test the image.
+4. Tag the repository as `vX.Y.Z` to publish versioned tags.
+
+## License
+
+This repository only builds a Docker image. anytls-go is distributed under its upstream license.
