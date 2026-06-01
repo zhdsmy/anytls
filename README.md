@@ -8,6 +8,7 @@ Docker image for [anytls-go](https://github.com/anytls/anytls-go), a TLS proxy s
 ## Included version
 
 - anytls-go: `0.0.12`
+- Go toolchain: `1.26`
 - Base image: `alpine:3.23`
 
 ## Supported platforms
@@ -109,4 +110,4 @@ The anytls-go version is pinned in `Dockerfile` and `.github/workflows/main.yml`
 
 ## License
 
-This repository only builds a Docker image. anytls-go is distributed under its upstream license.
+This repository builds anytls-go from upstream source for the target platform. anytls-go is distributed under its upstream license.

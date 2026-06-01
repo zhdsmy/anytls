@@ -1,19 +1,24 @@
 # syntax=docker/dockerfile:1
 
-FROM alpine:3.23 AS downloader
+FROM --platform=$BUILDPLATFORM golang:1.26-alpine AS builder
 
+ARG TARGETOS
 ARG TARGETARCH
 ARG VERSION=0.0.12
 
-RUN apk add --no-cache ca-certificates unzip wget \
+RUN apk add --no-cache ca-certificates tar wget \
     && case "${TARGETARCH}" in \
-         amd64) ANYTLS_ARCH="amd64" ;; \
-         arm64) ANYTLS_ARCH="arm64" ;; \
+         amd64 | arm64) ;; \
          *) echo "Unsupported TARGETARCH: ${TARGETARCH}" >&2; exit 1 ;; \
        esac \
-    && wget -qO /tmp/anytls.zip "https://github.com/anytls/anytls-go/releases/download/v${VERSION}/anytls_${VERSION}_linux_${ANYTLS_ARCH}.zip" \
-    && unzip -q /tmp/anytls.zip -d /tmp \
-    && install -m 0755 /tmp/anytls-server /usr/bin/anytls-server
+    && wget -qO /tmp/anytls.tar.gz "https://github.com/anytls/anytls-go/archive/refs/tags/v${VERSION}.tar.gz" \
+    && mkdir -p /src \
+    && tar -xzf /tmp/anytls.tar.gz -C /src --strip-components=1
+
+WORKDIR /src
+
+RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} \
+    go build -trimpath -buildvcs=false -ldflags="-s -w" -o /usr/bin/anytls-server ./cmd/server
 
 FROM alpine:3.23
 
@@ -30,7 +35,7 @@ ENV LISTEN_ADDR=0.0.0.0:8443 \
 
 EXPOSE 8443
 
-COPY --from=downloader /usr/bin/anytls-server /usr/bin/anytls-server
+COPY --from=builder /usr/bin/anytls-server /usr/bin/anytls-server
 COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
