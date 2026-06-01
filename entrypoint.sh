@@ -20,6 +20,7 @@ echo "Listen Address: ${LISTEN_ADDR}"
 echo "=========================================="
 
 if [ -n "${ARGS:-}" ]; then
+    # shellcheck disable=SC2086
     exec /usr/bin/anytls-server -l "${LISTEN_ADDR}" -p "${PSK}" ${ARGS}
 fi
 
