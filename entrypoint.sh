@@ -20,8 +20,11 @@ echo "Listen Address: ${LISTEN_ADDR}"
 echo "=========================================="
 
 if [ -n "${ARGS:-}" ]; then
+    echo "ARGS is deprecated. Pass extra anytls-server options after the image name instead."
+    set -f
     # shellcheck disable=SC2086
-    exec /usr/bin/anytls-server -l "${LISTEN_ADDR}" -p "${PSK}" ${ARGS}
+    set -- ${ARGS} "$@"
+    set +f
 fi
 
-exec /usr/bin/anytls-server -l "${LISTEN_ADDR}" -p "${PSK}"
+exec /usr/bin/anytls-server -l "${LISTEN_ADDR}" -p "${PSK}" "$@"

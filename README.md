@@ -57,8 +57,8 @@ docker run -d \
   -p 9443:9443 \
   -e LISTEN_ADDR="0.0.0.0:9443" \
   -e PSK="your-secure-password" \
-  -e ARGS="--help" \
-  domizhang/anytls:latest
+  domizhang/anytls:latest \
+  --help
 ```
 
 ## Docker Compose
@@ -82,7 +82,7 @@ services:
 | --- | --- | --- |
 | `LISTEN_ADDR` | `0.0.0.0:8443` | Server listen address and port |
 | `PSK` | generated | Pre-shared key. If empty, a random key is generated and printed once at startup |
-| `ARGS` | empty | Extra arguments passed to `anytls-server` |
+| `ARGS` | empty | Deprecated compatibility option. Prefer passing extra arguments after the image name |
 
 ## Security notes
 
