@@ -101,10 +101,10 @@ docker build \
 
 ## Update policy
 
-The anytls-go version is pinned in `Dockerfile` and `.github/workflows/main.yml`. To update:
+The anytls-go version is pinned in `VERSION` and `Dockerfile`. To update:
 
 1. Check the upstream [anytls-go releases](https://github.com/anytls/anytls-go/releases).
-2. Update `VERSION` / `DEFAULT_VERSION`.
+2. Update the `VERSION` file and `ARG VERSION` defaults.
 3. Build and test the image.
 4. Tag the repository as `vX.Y.Z` to publish versioned tags.
 

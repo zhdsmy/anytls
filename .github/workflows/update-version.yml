@@ -28,7 +28,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          CURRENT_VERSION="$(sed -n 's/^  DEFAULT_VERSION: //p' .github/workflows/main.yml)"
+          CURRENT_VERSION="$(tr -d '[:space:]' < VERSION)"
           LATEST_TAG="$(gh release view --repo "${UPSTREAM_REPO}" --json tagName -q .tagName)"
           LATEST_VERSION="${LATEST_TAG#v}"
 
@@ -47,7 +47,7 @@ jobs:
           fi
 
           perl -0pi -e "s/\Q${CURRENT_VERSION}\E/${LATEST_VERSION}/g" \
-            Dockerfile README.md .github/workflows/main.yml
+            VERSION Dockerfile README.md
 
       - name: Create update pull request
         uses: peter-evans/create-pull-request@v8
