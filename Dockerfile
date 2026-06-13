@@ -23,7 +23,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     && CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} \
     go build -trimpath -buildvcs=false -ldflags="-s -w" -o /usr/bin/anytls-server ./cmd/server
 
-FROM alpine:3.23
+FROM alpine:3.24
 
 ARG VERSION=0.0.12
 
@@ -41,7 +41,8 @@ EXPOSE 8443
 COPY --from=builder /usr/bin/anytls-server /usr/bin/anytls-server
 COPY entrypoint.sh /entrypoint.sh
 
-RUN chmod +x /entrypoint.sh
+RUN apk add --no-cache --upgrade libcrypto3 libssl3 \
+    && chmod +x /entrypoint.sh
 
 WORKDIR /
 
