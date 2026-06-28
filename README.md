@@ -7,7 +7,7 @@ Docker image for [anytls-go](https://github.com/anytls/anytls-go), a TLS proxy s
 
 ## Included version
 
-- anytls-go: `0.0.12`
+- anytls-go: `0.0.13`
 - Go toolchain: `1.26`
 - Base image: `alpine:3.23`
 
@@ -19,7 +19,7 @@ Docker image for [anytls-go](https://github.com/anytls/anytls-go), a TLS proxy s
 ## Tags
 
 - `latest`: latest build from the default branch
-- `0.0.12`: current AnyTLS version build
+- `0.0.13`: current AnyTLS version build
 - `0.0`: major/minor tag for versioned releases
 
 ## Quick start
@@ -95,7 +95,7 @@ services:
 
 ```bash
 docker build \
-  --build-arg VERSION=0.0.12 \
+  --build-arg VERSION=0.0.13 \
   -t domizhang/anytls:local .
 ```
 
