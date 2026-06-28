@@ -4,7 +4,7 @@ FROM --platform=$BUILDPLATFORM golang:1.26-alpine AS builder
 
 ARG TARGETOS
 ARG TARGETARCH
-ARG VERSION=0.0.12
+ARG VERSION=0.0.13
 
 RUN apk add --no-cache ca-certificates tar wget \
     && case "${TARGETARCH}" in \
@@ -25,7 +25,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 
 FROM alpine:3.24
 
-ARG VERSION=0.0.12
+ARG VERSION=0.0.13
 
 LABEL org.opencontainers.image.title="anytls" \
       org.opencontainers.image.description="Docker image for AnyTLS, a TLS proxy server" \
